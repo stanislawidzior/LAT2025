@@ -1,20 +1,24 @@
 package com.stanislawidzior.sii.task.collectionboxes.model;
 
+import com.stanislawidzior.sii.task.collectionboxes.model.enums.Currencies;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.Currency;
 
 @Entity
-@Data
-public class AmountInCurrency {
+@Getter
+@Setter
+@NoArgsConstructor
+public class MonetaryValue {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Currency currency;
+    private Currencies currency;
     @Column(nullable = false)
     private BigDecimal amount;
 

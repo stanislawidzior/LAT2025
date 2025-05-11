@@ -1,12 +1,18 @@
 package com.stanislawidzior.sii.task.collectionboxes.model;
 
+import com.stanislawidzior.sii.task.collectionboxes.model.enums.Currencies;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.util.Currency;
+import java.math.BigDecimal;
+
 
 @Entity
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 public class Account {
 
     @Id
@@ -16,8 +22,8 @@ public class Account {
     private Event event;
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Currency currency;
-    private Double balance;
+    private Currencies currency;
+    private BigDecimal balance;
 
 
 }

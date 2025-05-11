@@ -2,19 +2,25 @@ package com.stanislawidzior.sii.task.collectionboxes.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 public class Event {
     @Id
     @GeneratedValue(strategy  = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false)
+    private String title;
     @OneToMany(mappedBy = "event")
     private List<CollectionBox> collectionBoxes;
-    @Column(nullable = false)
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="account_id",referencedColumnName = "id")
+    @JoinColumn(name="account_id",referencedColumnName = "id", nullable = false)
     private Account account;
 }
