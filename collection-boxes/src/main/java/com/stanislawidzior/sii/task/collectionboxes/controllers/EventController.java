@@ -23,7 +23,7 @@ public class EventController {
     }
     @PostMapping("/")
     public ResponseEntity createEvent(@RequestBody EventDTO createEventDTO) throws CurrencyDeserializationException {
-    eventService.createEvent(createEventDTO);
-    return ResponseEntity.ok().build();
+    var id = eventService.createEvent(createEventDTO);
+    return ResponseEntity.ok().body("Created event with id: " + id);
 }
 }
