@@ -1,4 +1,4 @@
 package com.stanislawidzior.sii.task.collectionboxes.dtos;
 
-public record CreateEventDTO() {
+public record EventDTO(String title, AccountDTO account) {
 }
