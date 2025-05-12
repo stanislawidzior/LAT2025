@@ -18,11 +18,10 @@ public class CollectionBox {
     private Long id;
     @Column(nullable = false)
     private boolean registered = false;
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id", referencedColumnName = "id")
     private Event event;
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "box_id")
+    @OneToMany(mappedBy = "collectionBox", orphanRemoval = true)
     private List<MonetaryValue> monetaryValues = new ArrayList<>();
 
 
