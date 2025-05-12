@@ -25,5 +25,4 @@ public class Account {
     private Currencies currency;
     private BigDecimal balance;
 
-
 }
