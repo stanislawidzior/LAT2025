@@ -1,4 +1,5 @@
 package com.stanislawidzior.sii.task.collectionboxes.dtos.response;
 
-public record CreateEventResponse(Long id) implements ICrudResponse {
+public interface ICrudResponse {
+    Long id();
 }
