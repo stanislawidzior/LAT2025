@@ -10,7 +10,8 @@ Task for LAT2025
 [ ] Test service layer\
 [ ] Add Swagger for documentation\
 [ ] Look for improvements\
-[ ] Create sample JSON inputs
+[ ] Create sample JSON inputs\
+[ ] Think of improvements for types in Services
 
 # PERSISTENCE LAYER
 to do:
