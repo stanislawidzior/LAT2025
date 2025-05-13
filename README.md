@@ -11,7 +11,12 @@ Task for LAT2025
 [ ] Add Swagger for documentation\
 [ ] Look for improvements\
 [ ] Create sample JSON inputs\
-[ ] Think of improvements for types in Services
+[ ] Think of improvements for types in Services\
+[ ] Change Delete box dto to not expose assigned event
+[ ] Change Json properties\
+[ ] Add Exception handler for internal server error, maybe global for currencies error\
+[ ] Add Eception handler for invalid Json request\
+[ ] Change errorResponse to have error type and message 
 
 # PERSISTENCE LAYER
 to do:
