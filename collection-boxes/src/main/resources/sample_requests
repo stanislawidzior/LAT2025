@@ -1,0 +1,10 @@
+{
+  "title": "Fundraiser for Animal Shelter",
+  "account": {
+    "preferredCurrency": "usd"
+  }
+} POST create event
+
+{
+    "event_id" : 1
+} PATCH assign to event
