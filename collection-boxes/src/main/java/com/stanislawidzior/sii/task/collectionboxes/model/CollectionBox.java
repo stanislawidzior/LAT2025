@@ -17,7 +17,7 @@ public class CollectionBox {
     @GeneratedValue(strategy  = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
-    private boolean registered = false;
+    private boolean assigned = false;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id", referencedColumnName = "id")
     private Event event;
