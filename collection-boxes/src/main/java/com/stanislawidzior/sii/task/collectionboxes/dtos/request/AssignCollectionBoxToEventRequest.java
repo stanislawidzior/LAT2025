@@ -1,4 +1,6 @@
 package com.stanislawidzior.sii.task.collectionboxes.dtos.request;
 
-public record AssignCollectionBoxToEventRequest(String collectionBoxId, String eventId) {
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public record AssignCollectionBoxToEventRequest(@JsonProperty("event_id")Long eventId) {
 }

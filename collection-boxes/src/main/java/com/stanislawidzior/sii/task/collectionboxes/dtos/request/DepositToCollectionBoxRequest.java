@@ -1,4 +1,8 @@
 package com.stanislawidzior.sii.task.collectionboxes.dtos.request;
 
-public record DepositToCollectionBoxRequest() {
+
+import java.math.BigDecimal;
+
+public record DepositToCollectionBoxRequest(String currency, BigDecimal amount) {
+
 }

@@ -1,4 +1,4 @@
 package com.stanislawidzior.sii.task.collectionboxes.dtos.response;
 
-public record CollectionBoxDto() {
+public record CollectionBoxDto(boolean isEmpty, boolean isAssigned) {
 }
