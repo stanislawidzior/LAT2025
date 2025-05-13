@@ -1,6 +1,6 @@
 package com.stanislawidzior.sii.task.collectionboxes.mappers;
 
-import com.stanislawidzior.sii.task.collectionboxes.dtos.AccountDTO;
+import com.stanislawidzior.sii.task.collectionboxes.dtos.request.AccountDTO;
 import com.stanislawidzior.sii.task.collectionboxes.exceptions.CurrencyDeserializationException;
 import com.stanislawidzior.sii.task.collectionboxes.model.Account;
 import com.stanislawidzior.sii.task.collectionboxes.model.enums.Currencies;
