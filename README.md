@@ -4,8 +4,8 @@ Task for LAT2025
 # HOW TO RUN THE APP
 !please make sure you are running java 17 or it will not work!
 inside the root project directory(collection-boxes):\
-1. ./mvnw clean install\
-2. java -jar target/collection-boxes-0.0.1-SNAPSHOT.jar\
+1. ./mvnw clean install
+2. java -jar target/collection-boxes-0.0.1-SNAPSHOT.jar
 3. to stop: ctrl + C
 
 
@@ -20,8 +20,8 @@ available currencies values: USD, PLN, EUR
 - create a real client (now exchange rates are hardcoded)
 
 # REQUIREMENTS
-1. Create a new fundraising event.\ 
-validation:\
+1. Create a new fundraising event.
+validation:
 - [done] validate enum (thought maybe move it to a better place)\
 - [done] title must not be empty, title should be unique (TO DO)\
 2. Register a new collection box.(create)\
