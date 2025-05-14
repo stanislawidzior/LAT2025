@@ -16,11 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class EventController {
     private final IEventService eventService;
-    @ExceptionHandler(CurrencyDeserializationException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleInvalidCurrency(CurrencyDeserializationException e) {
-        return new ErrorResponse(e.getMessage());
-    }
+
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
     public ICrudResponse createEvent(@RequestBody CreateEventRequest createEventDTO) throws CurrencyDeserializationException {

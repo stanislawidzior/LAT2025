@@ -7,6 +7,7 @@ import com.stanislawidzior.sii.task.collectionboxes.exceptions.InvalidRequestExc
 import com.stanislawidzior.sii.task.collectionboxes.mappers.CollectionBoxMapper;
 import com.stanislawidzior.sii.task.collectionboxes.mappers.MonetaryValueMapper;
 import com.stanislawidzior.sii.task.collectionboxes.model.CollectionBox;
+import com.stanislawidzior.sii.task.collectionboxes.model.MonetaryValue;
 import com.stanislawidzior.sii.task.collectionboxes.repositories.CollectionBoxRepository;
 import com.stanislawidzior.sii.task.collectionboxes.repositories.EventRepository;
 import com.stanislawidzior.sii.task.collectionboxes.service.ICollectionBoxService;
@@ -14,6 +15,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 @Service
 @RequiredArgsConstructor
@@ -78,17 +80,33 @@ public class CollectionBoxService implements ICollectionBoxService {
     @Override
     public DepositToCollectionBoxResponse depositToCollectionBox(Long id, DepositToCollectionBoxRequest depositToCollectionBoxRequest) {
         var boxOpt = collectionBoxRepository.findById(id);
-        if(boxOpt.isPresent()) {
-            var box = boxOpt.get();
-            if(!box.isAssigned()) {
-                throw new InvalidRequestException("Collection Box is not assigned to any event");
-            }
-            var monetaryValues = box.getMonetaryValues();
-            monetaryValues.add(monetaryValueMapper.getEntityFromDto(depositToCollectionBoxRequest));
-            box.setMonetaryValues(monetaryValues);
-            collectionBoxRepository.save(box);
-            return new DepositToCollectionBoxResponse(box.getId(), depositToCollectionBoxRequest.amount(), depositToCollectionBoxRequest.currency());
+        if(depositToCollectionBoxRequest.amount().compareTo(BigDecimal.valueOf(0)) < 1){
+            throw new InvalidRequestException("Deposit amount must be greater than zero");
         }
-        throw new EntityNotFoundException("Collection Box with id: " + id + " not found");
+        if(!boxOpt.isPresent()) {
+            throw new EntityNotFoundException("Collection Box with id: " + id + " not found");
+        }
+        var box = boxOpt.get();
+        if(!box.isAssigned()) {
+            throw new InvalidRequestException("Collection Box is not assigned to any event");
+        }
+        var monetaryValues = box.getMonetaryValues();
+        updateMonetaryValue(monetaryValues, depositToCollectionBoxRequest);
+
+        box.setMonetaryValues(monetaryValues);
+        collectionBoxRepository.save(box);
+
+        return new DepositToCollectionBoxResponse(box.getId(), depositToCollectionBoxRequest.amount(), depositToCollectionBoxRequest.currency());
+    }
+    private void updateMonetaryValue(List<MonetaryValue> monetaryValues, DepositToCollectionBoxRequest depositToCollectionBoxRequest){
+        var requestEntity = monetaryValueMapper.getEntityFromDto(depositToCollectionBoxRequest);
+        var currentMonetaryValueOpt = monetaryValues.stream().filter(m -> requestEntity.getCurrency().equals(m.getCurrency())).findFirst();
+        if(currentMonetaryValueOpt.isEmpty()){
+            monetaryValues.add(requestEntity);
+        }
+        else{
+            var existingMonetaryValue = currentMonetaryValueOpt.get();
+            currentMonetaryValueOpt.get().setAmount(existingMonetaryValue.getAmount().add(requestEntity.getAmount()));
+        }
     }
 }
