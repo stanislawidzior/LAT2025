@@ -1,6 +1,28 @@
 # LAT2025
 Task for LAT2025
 
+# HOW TO RUN THE APP
+!please make sure you are running java 17 or it will not work!
+
+1. inside the root project directory(collection-boxes):
+./mvnw clean install
+2. 
+java -jar target/collection-boxes-0.0.1-SNAPSHOT.jar
+3. to stop: ctrl + C
+
+
+# ENDPOINTS
+can be found under: http://localhost:8080/swagger-ui/index.html
+available currencies values: USD, PLN, EUR
+
+# WHAT I WOULD DO IF I HAD MORE TIME
+
+- write more unit tests for service layer
+- write integration tests for endpoints
+- create a real client (now exchange rates are hardcoded)
+
+
+
 # to do
 [done] Create persistence layer entities\
 [done] Create persistence layer repositories\
@@ -8,61 +30,27 @@ Task for LAT2025
 [done] Create endpoints\
 [done] Create service layer\
 [ ] Test service layer\
-[ ] Add Swagger for documentation\
-[ ] Look for improvements\
+[done] Add Swagger for documentation\
+[done] Look for improvements\
 [ ] Create sample JSON inputs\
-[ ] Think of improvements for types in Services\
+[done] Think of improvements for types in Services\
 [ ] Change Delete box dto to not expose assigned event
-[ ] Change Json properties\
-[ ] Add Exception handler for internal server error, maybe global for currencies error\
-[ ] Add Eception handler for invalid Json request\
-[ ] Change errorResponse to have error type and message\
+[done] Change Json properties\
+[done] Add Exception handler for internal server error, maybe global for currencies error\
+[done] Add Eception handler for invalid Json request\
+[] Change errorResponse to have error type and message\
 [done] Finish CollectionBoxController widthdrawal and EventBoxController report\
 [done] Add unique to event title\
-[ ] Improve custom exceptions\
-[ ] add exception handler for WithdrawalAmount and BoxisEmpty\
+[done] Improve custom exceptions\
+[done] add exception handler for WithdrawalAmount and BoxisEmpty\
 [ ] add event title to be returned in some places
 [ ] add a common validator
 [ ] add timestamps
-# PERSISTENCE LAYER
-to do:
-- consider changing table names
-1. Schema:
 
-event:\
-id\
-title\
-collectionBoxes (one to many)\
-account (one to one)
 
-collection_box:
-id\
-registered\
-event (many to one)\
-monetary_amount (one to many)
 
-monetary_amount:\
-id\
-currency\
-amount
-
-account:\
-id\
-event (one to one)\
-preffered_currency\
-balance
-
-2. Repositories:
-
-3. Tests:
-Event:
-Account should be deleted when event is deleted
-Account should be saved when event is saved
-
-CollectionBox:
-MonetaryValue should be deleted when box is deleted
-MonetaryValue should be saved when 
-
+# tests:
+Didnt have enough time
 
 
 Things to consider:\
@@ -101,11 +89,11 @@ meaning: since colllection box containt event_id it is better to be done from bo
 requirements for withdrawal request: box must exist, box must have some money, box must be assigned (though if it has money it must be already assigned, becouse of previous validations)
 
 
-# REST ENDPOINTS
+# REQUIREMENTS
 1. Create a new fundraising event.\ 
 validation:\
 - [done] validate enum (thought maybe move it to a better place)\
-- [ ] title must not be empty, title should be unique (TO DO)\
+- [done] title must not be empty, title should be unique (TO DO)\
 2. Register a new collection box.(create)\
 validation: \
 - no needed\
