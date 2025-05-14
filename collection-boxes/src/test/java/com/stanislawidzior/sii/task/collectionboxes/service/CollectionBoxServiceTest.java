@@ -32,7 +32,7 @@ public class CollectionBoxServiceTest {
                 .thenAnswer(i-> i.getArguments()[0]);
 
         var response = collectionBoxService.createCollectionBox();
-        
+
         Assertions.assertThat(response.id() ==  collectionBox.getId());
         Assertions.assertThat(response).isNotNull();
 
