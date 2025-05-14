@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/box")
+@RequestMapping("/api/v1/boxes")
 @RequiredArgsConstructor
 public class CollectionBoxController {
     private final ICollectionBoxService collectionBoxService;
@@ -45,7 +45,11 @@ public class CollectionBoxController {
     public DepositToCollectionBoxResponse depositToCollectionBox(@PathVariable Long id, @RequestBody DepositToCollectionBoxRequest request) {
         return collectionBoxService.depositToCollectionBox(id, request);
     }
-
+    @PatchMapping("/{id}/withdrawal")
+    @ResponseStatus(HttpStatus.OK)
+    public WithdrawalFromCollectionBoxResponse withdrawalAllFromCollectionBox(@PathVariable Long id ){
+        return collectionBoxService.withdrawalFromCollectionBox(id);
+        }
 
 
 }

@@ -1,13 +1,17 @@
 package com.stanislawidzior.sii.task.collectionboxes.service.impl;
 
+import com.stanislawidzior.sii.task.collectionboxes.client.CurrenciesConverterClient;
 import com.stanislawidzior.sii.task.collectionboxes.dtos.request.AssignCollectionBoxToEventRequest;
 import com.stanislawidzior.sii.task.collectionboxes.dtos.request.DepositToCollectionBoxRequest;
 import com.stanislawidzior.sii.task.collectionboxes.dtos.response.*;
+import com.stanislawidzior.sii.task.collectionboxes.exceptions.BoxIsEmptyException;
 import com.stanislawidzior.sii.task.collectionboxes.exceptions.InvalidRequestException;
+import com.stanislawidzior.sii.task.collectionboxes.exceptions.WithdrawalAmountException;
 import com.stanislawidzior.sii.task.collectionboxes.mappers.CollectionBoxMapper;
 import com.stanislawidzior.sii.task.collectionboxes.mappers.MonetaryValueMapper;
 import com.stanislawidzior.sii.task.collectionboxes.model.CollectionBox;
 import com.stanislawidzior.sii.task.collectionboxes.model.MonetaryValue;
+import com.stanislawidzior.sii.task.collectionboxes.model.enums.Currencies;
 import com.stanislawidzior.sii.task.collectionboxes.repositories.CollectionBoxRepository;
 import com.stanislawidzior.sii.task.collectionboxes.repositories.EventRepository;
 import com.stanislawidzior.sii.task.collectionboxes.service.ICollectionBoxService;
@@ -24,6 +28,7 @@ public class CollectionBoxService implements ICollectionBoxService {
     private final EventRepository eventRepository;
     private final CollectionBoxMapper collectionBoxMapper;
     private final MonetaryValueMapper monetaryValueMapper;
+    private final CurrenciesConverterClient currenciesConverterClient;
     @Override
     public CreateCollectionBoxResponse createCollectionBox() {
         var newBox = new CollectionBox();
@@ -74,7 +79,22 @@ public class CollectionBoxService implements ICollectionBoxService {
 
     @Override
     public WithdrawalFromCollectionBoxResponse withdrawalFromCollectionBox(Long collectionBoxId) {
-        return null;
+       var boxOpt =  collectionBoxRepository.findById(collectionBoxId);
+       if(!boxOpt.isPresent()) {
+           throw new EntityNotFoundException("Collection Box with id: " + collectionBoxId + " not found");
+       }
+       var box = boxOpt.get();
+       if(!box.isAssigned()) {
+           throw new InvalidRequestException("Collection Box is not assigned to any event");
+       }
+       var monetaryValues = box.getMonetaryValues();
+       if(monetaryValues.isEmpty()){
+           throw new BoxIsEmptyException("Collection Box is empty");
+       }
+       BigDecimal amount = currenciesConverterClient.convertToPreferredCurrency(box.getEvent().getAccount().getCurrency(), monetaryValues);
+       box.getEvent().getAccount().setBalance(amount);
+       collectionBoxRepository.save(box);
+       return new WithdrawalFromCollectionBoxResponse(box.getId(), box.getEvent().getId(), amount);
     }
 
     @Override
