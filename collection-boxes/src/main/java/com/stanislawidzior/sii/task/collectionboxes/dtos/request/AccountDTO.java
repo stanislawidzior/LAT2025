@@ -1,6 +1,8 @@
 package com.stanislawidzior.sii.task.collectionboxes.dtos.request;
 
 
-public record AccountDTO(String preferredCurrency) {
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public record AccountDTO(@JsonProperty("preferred_currency")String preferredCurrency) {
 
 }

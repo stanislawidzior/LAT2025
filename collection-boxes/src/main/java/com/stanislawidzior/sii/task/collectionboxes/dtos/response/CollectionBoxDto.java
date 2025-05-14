@@ -1,4 +1,6 @@
 package com.stanislawidzior.sii.task.collectionboxes.dtos.response;
 
-public record CollectionBoxDto(boolean isEmpty, boolean isAssigned) {
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public record CollectionBoxDto(@JsonProperty("is_empty")boolean isEmpty, @JsonProperty("is_assigned")boolean isAssigned) {
 }

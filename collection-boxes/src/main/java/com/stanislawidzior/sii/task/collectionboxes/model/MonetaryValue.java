@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @NoArgsConstructor
+@Table(name = "monetary_values")
 public class MonetaryValue {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +22,7 @@ public class MonetaryValue {
     private Currencies currency;
     @Column(nullable = false)
     private BigDecimal amount;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="box_id", referencedColumnName = "id", nullable = false)
     private CollectionBox collectionBox;
 

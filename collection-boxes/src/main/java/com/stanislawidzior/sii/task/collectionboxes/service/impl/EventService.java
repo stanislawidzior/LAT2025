@@ -7,15 +7,16 @@ import com.stanislawidzior.sii.task.collectionboxes.dtos.response.CreateEventRes
 import com.stanislawidzior.sii.task.collectionboxes.dtos.response.EventReportResponse;
 import com.stanislawidzior.sii.task.collectionboxes.dtos.response.EventSummary;
 import com.stanislawidzior.sii.task.collectionboxes.dtos.response.WithdrawalFromCollectionBoxResponse;
-import com.stanislawidzior.sii.task.collectionboxes.exceptions.InvalidRequestException;
+import com.stanislawidzior.sii.task.collectionboxes.exceptions.notfound.ItemNotFoundException;
+import com.stanislawidzior.sii.task.collectionboxes.exceptions.constraint.UniqueNameViolationException;
 import com.stanislawidzior.sii.task.collectionboxes.mappers.AccountMapper;
 import com.stanislawidzior.sii.task.collectionboxes.mappers.EventMapper;
 import com.stanislawidzior.sii.task.collectionboxes.repositories.EventRepository;
 import com.stanislawidzior.sii.task.collectionboxes.service.IEventService;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import lombok.With;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -33,24 +34,30 @@ public class EventService implements IEventService {
         var account = accountMapper.mapAccountDtoToEntity(dto.account());
         account.setEvent(event);
         event.setAccount(account);
-        eventRepository.save(event);
+        try {
+            eventRepository.save(event);
+        }catch (DataIntegrityViolationException e) {
+            throw new UniqueNameViolationException("Event", dto.title());
+        }
         return new CreateEventResponse(event.getId());
     }
 
     @Override
-    public WithdrawalFromCollectionBoxResponse withdrawalFromCollectionBox(WithdrawalRequest withdrawalRequest) {
-       var eventOpt = eventRepository.findById(withdrawalRequest.eventId());
+    @Transactional
+    public WithdrawalFromCollectionBoxResponse withdrawalFromCollectionBox(Long eventId, WithdrawalRequest withdrawalRequest) {
+       var eventOpt = eventRepository.findById(eventId);
        if(!eventOpt.isPresent()){
-           throw new EntityNotFoundException("Event of id: " + withdrawalRequest.eventId() + " was not found");
+           throw new ItemNotFoundException("Event", eventId);
        }
        var event = eventOpt.get();
        var boxes = event.getCollectionBoxes();
        var boxOpt = boxes.stream().filter(box -> Objects.equals(box.getId(), withdrawalRequest.boxId())).findFirst();
        if(!boxOpt.isPresent()){
-           throw new EntityNotFoundException("Box with id: " + withdrawalRequest.boxId() + " was not found");
+           throw new ItemNotFoundException("Collection Box", withdrawalRequest.boxId());
        }
        var box = boxOpt.get();
        BigDecimal total = client.convertToPreferredCurrency(event.getAccount().getCurrency(),box.getMonetaryValues());
+       box.getMonetaryValues().clear();
        var currentBalance = event.getAccount().getBalance();
        event.getAccount().setBalance(currentBalance.add(total));
        eventRepository.save(event);

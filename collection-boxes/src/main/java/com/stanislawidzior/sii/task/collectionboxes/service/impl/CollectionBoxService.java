@@ -4,20 +4,18 @@ import com.stanislawidzior.sii.task.collectionboxes.client.CurrenciesConverterCl
 import com.stanislawidzior.sii.task.collectionboxes.dtos.request.AssignCollectionBoxToEventRequest;
 import com.stanislawidzior.sii.task.collectionboxes.dtos.request.DepositToCollectionBoxRequest;
 import com.stanislawidzior.sii.task.collectionboxes.dtos.response.*;
-import com.stanislawidzior.sii.task.collectionboxes.exceptions.BoxIsEmptyException;
-import com.stanislawidzior.sii.task.collectionboxes.exceptions.InvalidRequestException;
-import com.stanislawidzior.sii.task.collectionboxes.exceptions.WithdrawalAmountException;
+import com.stanislawidzior.sii.task.collectionboxes.exceptions.logic.*;
+import com.stanislawidzior.sii.task.collectionboxes.exceptions.notfound.ItemNotFoundException;
 import com.stanislawidzior.sii.task.collectionboxes.mappers.CollectionBoxMapper;
 import com.stanislawidzior.sii.task.collectionboxes.mappers.MonetaryValueMapper;
 import com.stanislawidzior.sii.task.collectionboxes.model.CollectionBox;
 import com.stanislawidzior.sii.task.collectionboxes.model.MonetaryValue;
-import com.stanislawidzior.sii.task.collectionboxes.model.enums.Currencies;
 import com.stanislawidzior.sii.task.collectionboxes.repositories.CollectionBoxRepository;
 import com.stanislawidzior.sii.task.collectionboxes.repositories.EventRepository;
 import com.stanislawidzior.sii.task.collectionboxes.service.ICollectionBoxService;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -46,7 +44,7 @@ public class CollectionBoxService implements ICollectionBoxService {
            collectionBoxRepository.deleteById(collectionBoxId);
            return new DeleteCollectionBoxResponse(collectionBoxId, assignedEventId);
        }
-       throw new EntityNotFoundException("Item with id: " + collectionBoxId + " not found");
+       throw new ItemNotFoundException("Collection Box", collectionBoxId);
        }
 
     @Override
@@ -55,60 +53,65 @@ public class CollectionBoxService implements ICollectionBoxService {
     }
 
     @Override
+    @Transactional
     public AssignCollectionBoxToEventResponse assignCollectionBoxToEvent(Long id, AssignCollectionBoxToEventRequest assignCollectionBoxToEventRequest) {
         var boxOpt = collectionBoxRepository.findById(id);
         var eventOpt = eventRepository.findById(assignCollectionBoxToEventRequest.eventId());
         if(boxOpt.isPresent()) {
             var box = boxOpt.get();
             if(box.isAssigned()) {
-                throw new InvalidRequestException("Collection Box is already assigned");
+                throw new AlreadyAssignedException();
             }
             if(!box.getMonetaryValues().isEmpty()){
-                throw new InvalidRequestException("Collection Box must be empty");
+                throw new AssigningOfNotEmptyBoxException();
             }
             if(!eventOpt.isPresent()) {
-                throw new EntityNotFoundException("Event with id: " + assignCollectionBoxToEventRequest.eventId() + " not found");
+                throw new ItemNotFoundException("Event", assignCollectionBoxToEventRequest.eventId());
             }
             box.setEvent(eventOpt.get());
             box.setAssigned(true);
             collectionBoxRepository.save(box);
             return new AssignCollectionBoxToEventResponse(id, assignCollectionBoxToEventRequest.eventId());
         }
-        throw new EntityNotFoundException("Collection Box with id: " + id + " not found");
+        throw new ItemNotFoundException("Collection Box", id);
     }
 
     @Override
+    @Transactional
     public WithdrawalFromCollectionBoxResponse withdrawalFromCollectionBox(Long collectionBoxId) {
        var boxOpt =  collectionBoxRepository.findById(collectionBoxId);
        if(!boxOpt.isPresent()) {
-           throw new EntityNotFoundException("Collection Box with id: " + collectionBoxId + " not found");
+           throw new ItemNotFoundException("Collection Box", collectionBoxId);
        }
        var box = boxOpt.get();
        if(!box.isAssigned()) {
-           throw new InvalidRequestException("Collection Box is not assigned to any event");
+           throw new CollectionBoxNotAssignedException();
        }
        var monetaryValues = box.getMonetaryValues();
        if(monetaryValues.isEmpty()){
-           throw new BoxIsEmptyException("Collection Box is empty");
+           throw new BoxIsEmptyException();
        }
        BigDecimal amount = currenciesConverterClient.convertToPreferredCurrency(box.getEvent().getAccount().getCurrency(), monetaryValues);
-       box.getEvent().getAccount().setBalance(amount);
+       var currentBalance = box.getEvent().getAccount().getBalance();
+       box.getEvent().getAccount().setBalance(amount.add(currentBalance));
+       box.getMonetaryValues().clear();
        collectionBoxRepository.save(box);
        return new WithdrawalFromCollectionBoxResponse(box.getId(), box.getEvent().getId(), amount);
     }
 
     @Override
+    @Transactional
     public DepositToCollectionBoxResponse depositToCollectionBox(Long id, DepositToCollectionBoxRequest depositToCollectionBoxRequest) {
         var boxOpt = collectionBoxRepository.findById(id);
         if(depositToCollectionBoxRequest.amount().compareTo(BigDecimal.valueOf(0)) < 1){
-            throw new InvalidRequestException("Deposit amount must be greater than zero");
+            throw new DepositAmountException();
         }
         if(!boxOpt.isPresent()) {
-            throw new EntityNotFoundException("Collection Box with id: " + id + " not found");
+            throw new ItemNotFoundException("Collection Box", id);
         }
         var box = boxOpt.get();
         if(!box.isAssigned()) {
-            throw new InvalidRequestException("Collection Box is not assigned to any event");
+            throw new CollectionBoxNotAssignedException();
         }
         var monetaryValues = box.getMonetaryValues();
         updateMonetaryValue(monetaryValues, depositToCollectionBoxRequest);

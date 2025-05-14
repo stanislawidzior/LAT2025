@@ -1,9 +1,11 @@
 package com.stanislawidzior.sii.task.collectionboxes.controllers;
 
 import com.stanislawidzior.sii.task.collectionboxes.dtos.response.ErrorResponse;
-import com.stanislawidzior.sii.task.collectionboxes.exceptions.CurrencyDeserializationException;
+import com.stanislawidzior.sii.task.collectionboxes.exceptions.DeserializationException;
 import com.stanislawidzior.sii.task.collectionboxes.exceptions.InvalidRequestException;
-import jakarta.persistence.EntityNotFoundException;
+import com.stanislawidzior.sii.task.collectionboxes.exceptions.NotFoundException;
+import com.stanislawidzior.sii.task.collectionboxes.exceptions.notfound.ItemNotFoundException;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -11,21 +13,30 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-
-    @ExceptionHandler(EntityNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleEntityNotFoundException(EntityNotFoundException e) {
-        return new ErrorResponse(e.getMessage());
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handleException(Exception e) {
+        return new ErrorResponse(e.getMessage(), "INTERNAL_SERVER_ERROR");
     }
-    @ExceptionHandler(CurrencyDeserializationException.class)
+    @ExceptionHandler(NotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleNotFoundException(NotFoundException e) {
+        return new ErrorResponse(e.getMessage(), "NOT_FOUND");
+    }
+    @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleInvalidCurrency(CurrencyDeserializationException e) {
-        return new ErrorResponse(e.getMessage());
+    public ErrorResponse handleConstraintViolationExceptions(ConstraintViolationException e) {
+        return new ErrorResponse(e.getMessage(), "CONSTRAINT_ERROR");
+    }
+    @ExceptionHandler(DeserializationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleDeserializationExceptions(DeserializationException e) {
+        return new ErrorResponse(e.getMessage(), "DESERIALIZATION_ERROR");
     }
     @ExceptionHandler(InvalidRequestException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleInvalidRequest(InvalidRequestException e) {
-        return new ErrorResponse(e.getMessage());
+    public ErrorResponse handleInvalidRequestExceptions(InvalidRequestException e) {
+        return new ErrorResponse(e.getMessage(), "BUSINESS_LOGIC_ERROR");
     }
 }
 

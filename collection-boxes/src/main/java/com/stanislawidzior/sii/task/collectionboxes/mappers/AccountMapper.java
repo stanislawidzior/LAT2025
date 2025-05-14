@@ -1,7 +1,7 @@
 package com.stanislawidzior.sii.task.collectionboxes.mappers;
 
 import com.stanislawidzior.sii.task.collectionboxes.dtos.request.AccountDTO;
-import com.stanislawidzior.sii.task.collectionboxes.exceptions.CurrencyDeserializationException;
+import com.stanislawidzior.sii.task.collectionboxes.exceptions.deserialization.CurrencyDeserializationException;
 import com.stanislawidzior.sii.task.collectionboxes.model.Account;
 import com.stanislawidzior.sii.task.collectionboxes.model.enums.Currencies;
 import org.springframework.stereotype.Component;

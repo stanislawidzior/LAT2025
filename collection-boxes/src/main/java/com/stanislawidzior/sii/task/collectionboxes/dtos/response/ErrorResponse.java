@@ -1,4 +1,6 @@
 package com.stanislawidzior.sii.task.collectionboxes.dtos.response;
 
-public record ErrorResponse(String error) {
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public record ErrorResponse(String message, @JsonProperty("error_type") String errorType) {
 }

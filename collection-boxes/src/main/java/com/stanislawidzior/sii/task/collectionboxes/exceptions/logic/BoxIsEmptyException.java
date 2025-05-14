@@ -1,6 +1,8 @@
-package com.stanislawidzior.sii.task.collectionboxes.exceptions;
+package com.stanislawidzior.sii.task.collectionboxes.exceptions.logic;
 
-public class BoxIsEmptyException extends ValidationException {
+import com.stanislawidzior.sii.task.collectionboxes.exceptions.InvalidRequestException;
+
+public class BoxIsEmptyException extends InvalidRequestException {
     public BoxIsEmptyException() {
         super("Collection Box is empty");
     }

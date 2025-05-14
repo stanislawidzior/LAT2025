@@ -1,6 +1,8 @@
-package com.stanislawidzior.sii.task.collectionboxes.exceptions;
+package com.stanislawidzior.sii.task.collectionboxes.exceptions.deserialization;
 
-public class CurrencyDeserializationException extends ValidationException {
+import com.stanislawidzior.sii.task.collectionboxes.exceptions.DeserializationException;
+
+public class CurrencyDeserializationException extends DeserializationException {
     public CurrencyDeserializationException(String currency) {
         super("Invalid currency: " + currency);
     }

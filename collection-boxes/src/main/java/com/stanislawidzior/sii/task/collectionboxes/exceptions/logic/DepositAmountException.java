@@ -1,6 +1,8 @@
-package com.stanislawidzior.sii.task.collectionboxes.exceptions;
+package com.stanislawidzior.sii.task.collectionboxes.exceptions.logic;
 
-public class DepositAmountException extends RuntimeException {
+import com.stanislawidzior.sii.task.collectionboxes.exceptions.InvalidRequestException;
+
+public class DepositAmountException extends InvalidRequestException {
     public DepositAmountException() {
         super("Deposit Amount must be greater than 0");
     }

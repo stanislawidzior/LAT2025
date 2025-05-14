@@ -1,7 +1,6 @@
 package com.stanislawidzior.sii.task.collectionboxes.service;
 
 import com.stanislawidzior.sii.task.collectionboxes.dtos.request.AssignCollectionBoxToEventRequest;
-import com.stanislawidzior.sii.task.collectionboxes.dtos.request.CreateCollectionBoxRequest;
 import com.stanislawidzior.sii.task.collectionboxes.dtos.request.DepositToCollectionBoxRequest;
 import com.stanislawidzior.sii.task.collectionboxes.dtos.response.*;
 

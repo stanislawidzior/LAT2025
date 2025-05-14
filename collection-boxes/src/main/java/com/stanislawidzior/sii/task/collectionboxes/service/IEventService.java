@@ -9,7 +9,7 @@ import com.stanislawidzior.sii.task.collectionboxes.dtos.response.WithdrawalFrom
 
 public interface IEventService {
     CreateEventResponse createEvent(CreateEventRequest dto);
-    WithdrawalFromCollectionBoxResponse withdrawalFromCollectionBox(WithdrawalRequest withdrawalRequest);
+    WithdrawalFromCollectionBoxResponse withdrawalFromCollectionBox(Long eventId, WithdrawalRequest withdrawalRequest);
     EventReportResponse getReport();
 
 }

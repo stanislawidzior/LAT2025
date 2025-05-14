@@ -1,6 +1,6 @@
 package com.stanislawidzior.sii.task.collectionboxes.client;
 
-import com.stanislawidzior.sii.task.collectionboxes.exceptions.WithdrawalAmountException;
+import com.stanislawidzior.sii.task.collectionboxes.exceptions.logic.WithdrawalAmountException;
 import com.stanislawidzior.sii.task.collectionboxes.model.MonetaryValue;
 import com.stanislawidzior.sii.task.collectionboxes.model.enums.Currencies;
 import org.springframework.stereotype.Component;
