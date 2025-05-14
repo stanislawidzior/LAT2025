@@ -21,7 +21,7 @@ public class MonetaryValue {
     private Currencies currency;
     @Column(nullable = false)
     private BigDecimal amount;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="box_id", referencedColumnName = "id", nullable = false)
     private CollectionBox collectionBox;
 

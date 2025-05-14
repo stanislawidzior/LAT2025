@@ -5,4 +5,6 @@ public enum Currencies {
     PLN,
     EUR,
     USD
+
+
 }
