@@ -3,16 +3,14 @@ Task for LAT2025
 
 # HOW TO RUN THE APP
 !please make sure you are running java 17 or it will not work!
-
-1. inside the root project directory(collection-boxes):
-./mvnw clean install
-2. 
-java -jar target/collection-boxes-0.0.1-SNAPSHOT.jar
+inside the root project directory(collection-boxes):\
+1. ./mvnw clean install\
+2. java -jar target/collection-boxes-0.0.1-SNAPSHOT.jar\
 3. to stop: ctrl + C
 
 
 # ENDPOINTS
-can be found under: http://localhost:8080/swagger-ui/index.html
+http://localhost:8080/swagger-ui/index.html here are the enpoints with sample json inputs\ 
 available currencies values: USD, PLN, EUR
 
 # WHAT I WOULD DO IF I HAD MORE TIME
@@ -21,9 +19,46 @@ available currencies values: USD, PLN, EUR
 - write integration tests for endpoints
 - create a real client (now exchange rates are hardcoded)
 
+# REQUIREMENTS
+1. Create a new fundraising event.\ 
+validation:\
+- [done] validate enum (thought maybe move it to a better place)\
+- [done] title must not be empty, title should be unique (TO DO)\
+2. Register a new collection box.(create)\
+validation: \
+- no needed\
+3. List all collection boxes. Include information if the box is assigned (but don’t expose to what\
+fundraising event) and if it is empty or not (but don’t expose the actual value in the box).\
+validation:\
+- no needed BUT maybe i shouldt expose event_id when assigning a box to event?\
+4. Unregister (remove) a collection box (e.g. in case it was damaged or stolen).\
+validation:
+- [done] box must exist
+5. Assign the collection box to an existing fundraising event
+validation:
+- [done] box must exist
+- [done] box must not be assigned
+- [done] box must be empty (though it should never be unassigned and filled with money becouse deposit wont be allowed for unassigned boxes)
+- [done] event must exist
+6. Put (add) some money inside the collection box.
+validation:
+- [done]box must exist
+- [done]box must be assigned
+- [done]validate enum
+7. Empty the collection box i.e. “transfer” money from the box to the fundraising event’s account.
+validation:
+- [done] box must be assigned
+- [done] box must exist
+- [done] box must have money
+8. Display a financial report with all fundraising events and the sum of their accounts.
+validation:
+- none needed
 
 
-# to do
+
+
+
+- TO DO\
 [done] Create persistence layer entities\
 [done] Create persistence layer repositories\
 [ ] Test repositories\
@@ -48,9 +83,6 @@ available currencies values: USD, PLN, EUR
 [ ] add timestamps
 
 
-
-# tests:
-Didnt have enough time
 
 
 Things to consider:\
@@ -89,40 +121,7 @@ meaning: since colllection box containt event_id it is better to be done from bo
 requirements for withdrawal request: box must exist, box must have some money, box must be assigned (though if it has money it must be already assigned, becouse of previous validations)
 
 
-# REQUIREMENTS
-1. Create a new fundraising event.\ 
-validation:\
-- [done] validate enum (thought maybe move it to a better place)\
-- [done] title must not be empty, title should be unique (TO DO)\
-2. Register a new collection box.(create)\
-validation: \
-- no needed\
-3. List all collection boxes. Include information if the box is assigned (but don’t expose to what\
-fundraising event) and if it is empty or not (but don’t expose the actual value in the box).\
-validation:\
-- no needed BUT maybe i shouldt expose event_id when assigning a box to event?\
-4. Unregister (remove) a collection box (e.g. in case it was damaged or stolen).\
-validation:
-- [done] box must exist
-5. Assign the collection box to an existing fundraising event
-validation:
-- [done] box must exist
-- [done] box must not be assigned
-- [done] box must be empty (though it should never be unassigned and filled with money becouse deposit wont be allowed for unassigned boxes)
-- [done] event must exist
-6. Put (add) some money inside the collection box.
-validation:
-- [done]box must exist
-- [done]box must be assigned
-- [done]validate enum
-7. Empty the collection box i.e. “transfer” money from the box to the fundraising event’s account.
-validation:
-- [done] box must be assigned
-- [done] box must exist
-- [done] box must have money
-8. Display a financial report with all fundraising events and the sum of their accounts.
-validation:
-- none needed
+
 
 
 
