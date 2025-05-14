@@ -18,7 +18,9 @@ Task for LAT2025
 [ ] Add Eception handler for invalid Json request\
 [ ] Change errorResponse to have error type and message\
 [ ] Finish CollectionBoxController widthdrawal and EventBoxController report\
-[ ] Add unique to event title
+[done] Add unique to event title\
+[ ] Improve custom exceptions
+[ ] add exception handler for WithdrawalAmount and BoxisEmpty
 
 # PERSISTENCE LAYER
 to do:
@@ -124,9 +126,9 @@ validation:
 - [done]validate enum
 7. Empty the collection box i.e. “transfer” money from the box to the fundraising event’s account.
 validation:
-- [] box must be assigned
-- [] box must exist
-- [] box must have money
+- [done] box must be assigned
+- [done] box must exist
+- [done] box must have money
 8. Display a financial report with all fundraising events and the sum of their accounts.
 validation:
 - none needed
