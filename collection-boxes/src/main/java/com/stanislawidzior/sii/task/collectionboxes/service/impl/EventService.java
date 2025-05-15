@@ -7,6 +7,7 @@ import com.stanislawidzior.sii.task.collectionboxes.dtos.response.CreateEventRes
 import com.stanislawidzior.sii.task.collectionboxes.dtos.response.EventReportResponse;
 import com.stanislawidzior.sii.task.collectionboxes.dtos.response.EventSummary;
 import com.stanislawidzior.sii.task.collectionboxes.dtos.response.WithdrawalFromCollectionBoxResponse;
+import com.stanislawidzior.sii.task.collectionboxes.exceptions.logic.EventNameIsEmptyException;
 import com.stanislawidzior.sii.task.collectionboxes.exceptions.notfound.ItemNotFoundException;
 import com.stanislawidzior.sii.task.collectionboxes.exceptions.constraint.UniqueNameViolationException;
 import com.stanislawidzior.sii.task.collectionboxes.mappers.AccountMapper;
@@ -31,6 +32,9 @@ public class EventService implements IEventService {
     @Override
     @Transactional
     public CreateEventResponse createEvent(CreateEventRequest dto) {
+        if(dto.title().isEmpty()){
+            throw new EventNameIsEmptyException();
+        }
         var event = eventMapper.mapDtoToEntity(dto);
         var account = accountMapper.mapAccountDtoToEntity(dto.account());
         account.setEvent(event);
@@ -46,7 +50,7 @@ public class EventService implements IEventService {
     @Override
     @Transactional
     public WithdrawalFromCollectionBoxResponse withdrawalFromCollectionBox(Long eventId, WithdrawalRequest withdrawalRequest) {
-       var eventOpt = eventRepository.findById(eventId);
+        var eventOpt = eventRepository.findById(eventId);
        if(!eventOpt.isPresent()){
            throw new ItemNotFoundException("Event", eventId);
        }
