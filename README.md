@@ -2,7 +2,7 @@
 Task for LAT2025
 
 # HOW TO RUN THE APP
-!please make sure you are running java 17 or it may not work!
+!Please make sure you are using Java 17, other versions may couse error when building the project!
 ## inside the root project directory(collection-boxes):
 1. ./mvnw clean install
 2. java -jar target/collection-boxes-0.0.1-SNAPSHOT.jar
