@@ -7,6 +7,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class CollectionBoxMapper {
     public CollectionBoxDto mapEntityToDto(CollectionBox collectionBox) {
-        return new CollectionBoxDto(collectionBox.getMonetaryValues().isEmpty(), collectionBox.isAssigned());
+        return new CollectionBoxDto(collectionBox.getId(), collectionBox.getMonetaryValues().isEmpty(), collectionBox.isAssigned());
     }
 }

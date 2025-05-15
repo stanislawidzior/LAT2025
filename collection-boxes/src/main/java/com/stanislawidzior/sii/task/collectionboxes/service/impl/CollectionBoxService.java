@@ -41,6 +41,9 @@ public class CollectionBoxService implements ICollectionBoxService {
        if(boxOpt.isPresent()) {
            var box = boxOpt.get();
            Long assignedEventId = box.isAssigned() ? box.getEvent().getId() : null;
+           if (box.getEvent() != null) {
+               box.getEvent().getCollectionBoxes().remove(box);
+           }
            collectionBoxRepository.deleteById(collectionBoxId);
            return new DeleteCollectionBoxResponse(collectionBoxId, assignedEventId);
        }

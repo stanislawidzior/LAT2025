@@ -70,7 +70,7 @@ public class EventService implements IEventService {
     public EventReportResponse getReport() {
         var events = eventRepository.findAll();
         var summariesList = events.stream().map(e ->
-                new EventSummary(e.getTitle(),e.getAccount().getBalance(),e.getAccount().getCurrency().toString())).toList();
+                new EventSummary(e.getId(),e.getTitle(),e.getAccount().getBalance(),e.getAccount().getCurrency().toString())).toList();
         return new EventReportResponse(summariesList);
     }
 }

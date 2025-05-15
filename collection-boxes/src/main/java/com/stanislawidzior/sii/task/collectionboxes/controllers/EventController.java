@@ -35,7 +35,7 @@ public class EventController {
             description = "Withdrawals all funds from collection box to linked events account")
     @PatchMapping("/{id}/boxes")
     @ResponseStatus(HttpStatus.OK)
-    public WithdrawalFromCollectionBoxResponse withdrawalFromBox(@RequestParam Long id, @RequestBody WithdrawalRequest request){
+    public WithdrawalFromCollectionBoxResponse withdrawalFromBox(@PathVariable Long id, @RequestBody WithdrawalRequest request){
         return eventService.withdrawalFromCollectionBox(id, request);
     }
 
