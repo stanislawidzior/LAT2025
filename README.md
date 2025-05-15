@@ -3,15 +3,15 @@ Task for LAT2025
 
 # HOW TO RUN THE APP
 !please make sure you are running java 17 or it may not work!
-inside the root project directory(collection-boxes):\
+## inside the root project directory(collection-boxes):
 1. ./mvnw clean install
 2. java -jar target/collection-boxes-0.0.1-SNAPSHOT.jar
 3. to stop: ctrl + C
 
 
 # ENDPOINTS
-http://localhost:8080/swagger-ui/index.html here are the enpoints with sample json inputs\ 
-available currencies values: USD, PLN, EUR
+`http://localhost:8080/swagger-ui/index.html` here are the enpoints with sample json inputs
+## available currencies values: USD, PLN, EUR
 
 
 
@@ -77,7 +77,7 @@ available currencies values: USD, PLN, EUR
 
 
 
-# MY NOTES #
+# MY NOTES  #
 - TO DO\
 [done] Create persistence layer entities\
 [done] Create persistence layer repositories\
@@ -137,7 +137,7 @@ meaning: a currencies enum and value in MonetaryValue entity with many to one re
 meaining: account entity with one to one relationship with event, account enitity have preffered currency\
 [done] When money is transferred from a collection box to a founraising event's account it is converted to the currency used by the fundraising event. the exchange rates can be hardcoded.\
 meaning: since colllection box containt event_id it is better to be done from box perspective, additionally there is no requirement to withdrawal from all boxes at once so it makes even more sense to do it from box perspective\
-!drop that! according to requirements there should be no info in boxes report to what event box is assigned so its better to withdraw from event perspective, but i will leave for now!/
+! according to requirements there should be no info in boxes report to what event box is assigned so its better to withdraw from event perspective, but i will leave for now, but event report also mustn't share this info. For me it would make the most sense to have widhtraw from all boxes in /api/v1/event/{id}/withdraw
 requirements for withdrawal request: box must exist, box must have some money, box must be assigned (though if it has money it must be already assigned, becouse of previous validations)
 
 
