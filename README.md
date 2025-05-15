@@ -2,7 +2,7 @@
 Task for LAT2025
 
 # HOW TO RUN THE APP
-!please make sure you are running java 17 or it will not work!
+!please make sure you are running java 17 or it may not work!
 inside the root project directory(collection-boxes):\
 1. ./mvnw clean install
 2. java -jar target/collection-boxes-0.0.1-SNAPSHOT.jar
@@ -13,51 +13,71 @@ inside the root project directory(collection-boxes):\
 http://localhost:8080/swagger-ui/index.html here are the enpoints with sample json inputs\ 
 available currencies values: USD, PLN, EUR
 
-# WHAT I WOULD DO IF I HAD MORE TIME
+
+
+# If I HAD MORE TIME I WOULD
 
 - write more unit tests for service layer
 - write integration tests for endpoints
 - create a real client (now exchange rates are hardcoded)
+- add some pagination and sorting
 
 # REQUIREMENTS
-1. Create a new fundraising event.
-validation:
-- [done] validate enum (thought maybe move it to a better place)\
-- [done] title must not be empty, title should be unique (TO DO)\
-2. Register a new collection box.(create)\
-validation: \
-- no needed\
-3. List all collection boxes. Include information if the box is assigned (but don’t expose to what\
-fundraising event) and if it is empty or not (but don’t expose the actual value in the box).\
-validation:\
-- no needed BUT maybe i shouldt expose event_id when assigning a box to event?\
-4. Unregister (remove) a collection box (e.g. in case it was damaged or stolen).\
-validation:
+## 1. Create a new fundraising event. 
+**endpoint** `POST /api/v1/events`
+
+**validation:**
+- [done] validate enum
+- [done] title must not be empty, title should be unique
+## 2. Register a new collection box.(create)
+**endpoint** `POST /api/v1/boxes`
+
+**validation:**
+- no needed
+## 3. List all collection boxes. Include information if the box is assigned (but don’t expose to what fundraising event) and if it is empty or not (but don’t expose the actual value in the box).
+**endpoint** `GET /api/v1/boxes`
+
+**validation:**
+- no needed
+## 4. Unregister (remove) a collection box (e.g. in case it was damaged or stolen).
+**endpoint** `DELETE /api/v1/boxes/{id}`
+
+**validation:**
 - [done] box must exist
-5. Assign the collection box to an existing fundraising event
-validation:
+## 5. Assign the collection box to an existing fundraising event
+**endpoint** `PATCH /api/v1/boxes/{id}/event`
+
+**validation:**
 - [done] box must exist
 - [done] box must not be assigned
 - [done] box must be empty (though it should never be unassigned and filled with money becouse deposit wont be allowed for unassigned boxes)
 - [done] event must exist
-6. Put (add) some money inside the collection box.
-validation:
+## 6. Put (add) some money inside the collection box.
+**endpoint** `PATCH /api/v1/boxes/{id}`
+
+**validation:**
 - [done]box must exist
 - [done]box must be assigned
 - [done]validate enum
-7. Empty the collection box i.e. “transfer” money from the box to the fundraising event’s account.
-validation:
+## 7. Empty the collection box i.e. “transfer” money from the box to the fundraising event’s account.
+**endpoint** `PATCH /api/v1/boxes/{id}/withdrawal`
+
+**validation:**
 - [done] box must be assigned
 - [done] box must exist
 - [done] box must have money
-8. Display a financial report with all fundraising events and the sum of their accounts.
-validation:
+## 8. Display a financial report with all fundraising events and the sum of their accounts.
+**endpoint** `GET /api/v1/events/report`
+
+**validation:**
 - none needed
 
 
 
 
 
+
+# MY NOTES #
 - TO DO\
 [done] Create persistence layer entities\
 [done] Create persistence layer repositories\
