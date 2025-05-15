@@ -17,7 +17,8 @@ import org.springframework.web.bind.annotation.*;
 public class EventController {
     private final IEventService eventService;
     @Operation(summary = "Create a new event",
-            description = "Creates a new fundraising event with a linked account")
+            description = "Creates a new fundraising event with a linked account, available " +
+                    "currencies: USD, PLN, EUR")
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
     public CreateEventResponse createEvent(@RequestBody CreateEventRequest createEventDTO) {

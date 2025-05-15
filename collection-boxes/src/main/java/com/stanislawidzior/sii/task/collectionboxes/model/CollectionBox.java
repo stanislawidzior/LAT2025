@@ -18,7 +18,7 @@ public class CollectionBox {
     private Long id;
     @Column(nullable = false)
     private boolean assigned = false;
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id", referencedColumnName = "id")
     private Event event;
     @OneToMany(mappedBy = "collectionBox", cascade = CascadeType.ALL, orphanRemoval = true)

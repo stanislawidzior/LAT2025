@@ -29,6 +29,7 @@ public class EventService implements IEventService {
     private final EventMapper eventMapper;
     private final CurrenciesConverterClient client;
     @Override
+    @Transactional
     public CreateEventResponse createEvent(CreateEventRequest dto) {
         var event = eventMapper.mapDtoToEntity(dto);
         var account = accountMapper.mapAccountDtoToEntity(dto.account());

@@ -114,18 +114,20 @@ public class CollectionBoxService implements ICollectionBoxService {
             throw new CollectionBoxNotAssignedException();
         }
         var monetaryValues = box.getMonetaryValues();
-        updateMonetaryValue(monetaryValues, depositToCollectionBoxRequest);
+        updateMonetaryValue(monetaryValues, depositToCollectionBoxRequest, box);
 
         box.setMonetaryValues(monetaryValues);
         collectionBoxRepository.save(box);
 
         return new DepositToCollectionBoxResponse(box.getId(), depositToCollectionBoxRequest.amount(), depositToCollectionBoxRequest.currency());
     }
-    private void updateMonetaryValue(List<MonetaryValue> monetaryValues, DepositToCollectionBoxRequest depositToCollectionBoxRequest){
+    private void updateMonetaryValue(List<MonetaryValue> monetaryValues, DepositToCollectionBoxRequest depositToCollectionBoxRequest, CollectionBox box){
         var requestEntity = monetaryValueMapper.getEntityFromDto(depositToCollectionBoxRequest);
         var currentMonetaryValueOpt = monetaryValues.stream().filter(m -> requestEntity.getCurrency().equals(m.getCurrency())).findFirst();
         if(currentMonetaryValueOpt.isEmpty()){
+            requestEntity.setCollectionBox(box);
             monetaryValues.add(requestEntity);
+
         }
         else{
             var existingMonetaryValue = currentMonetaryValueOpt.get();

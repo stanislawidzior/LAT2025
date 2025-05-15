@@ -4,7 +4,6 @@ import com.stanislawidzior.sii.task.collectionboxes.dtos.request.CreateEventRequ
 import com.stanislawidzior.sii.task.collectionboxes.dtos.request.WithdrawalRequest;
 import com.stanislawidzior.sii.task.collectionboxes.dtos.response.CreateEventResponse;
 import com.stanislawidzior.sii.task.collectionboxes.dtos.response.EventReportResponse;
-import com.stanislawidzior.sii.task.collectionboxes.dtos.response.ICrudResponse;
 import com.stanislawidzior.sii.task.collectionboxes.dtos.response.WithdrawalFromCollectionBoxResponse;
 
 public interface IEventService {

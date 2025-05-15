@@ -1,11 +1,11 @@
 package com.stanislawidzior.sii.task.collectionboxes.controllers;
 
 import com.stanislawidzior.sii.task.collectionboxes.dtos.response.ErrorResponse;
+import com.stanislawidzior.sii.task.collectionboxes.exceptions.ConstraintException;
 import com.stanislawidzior.sii.task.collectionboxes.exceptions.DeserializationException;
 import com.stanislawidzior.sii.task.collectionboxes.exceptions.InvalidRequestException;
 import com.stanislawidzior.sii.task.collectionboxes.exceptions.NotFoundException;
-import com.stanislawidzior.sii.task.collectionboxes.exceptions.notfound.ItemNotFoundException;
-import jakarta.validation.ConstraintViolationException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -23,9 +23,9 @@ public class GlobalExceptionHandler {
     public ErrorResponse handleNotFoundException(NotFoundException e) {
         return new ErrorResponse(e.getMessage(), "NOT_FOUND");
     }
-    @ExceptionHandler(ConstraintViolationException.class)
+    @ExceptionHandler(ConstraintException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleConstraintViolationExceptions(ConstraintViolationException e) {
+    public ErrorResponse handleConstraintViolationExceptions(ConstraintException e) {
         return new ErrorResponse(e.getMessage(), "CONSTRAINT_ERROR");
     }
     @ExceptionHandler(DeserializationException.class)
